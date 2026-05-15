@@ -268,4 +268,50 @@ main
 
 ---
 
+---
+
+## 13. 개발 서버 (NAS / 외부 접속)
+
+정적 파일은 **Vite** 개발 서버로 제공합니다. `0.0.0.0`에 바인딩되어 LAN·외부에서 접속 가능합니다.
+
+### 13.1 최초 1회 (NAS SSH 또는 터미널)
+
+```bash
+cd /path/to/heyum-static   # NAS에 클론·복사한 프로젝트 경로
+npm install
+```
+
+### 13.2 서버 실행
+
+```bash
+npm run dev
+```
+
+기본 주소:
+
+| 접속 위치 | URL 예시 |
+|-----------|----------|
+| NAS 본인 | `http://127.0.0.1:5173` |
+| 같은 Wi‑Fi | `http://<NAS-IP>:5173` |
+| 외부 인터넷 | 공유기 포트포워딩 또는 Ugreen 역방향 프록시 후 `http://<공인IP>:5173` |
+
+포트 변경: `PORT=8080 npm run dev` 또는 `.env`에 `PORT=8080` 설정.
+
+### 13.3 Ugreen NAS 체크리스트
+
+1. **Node.js** — Ugreen 앱 스토어 / Docker / `nvm` 등으로 Node 18+ 설치
+2. **방화벽** — NAS 설정에서 TCP `5173`(또는 지정 포트) 허용
+3. **포트포워딩** (외부용) — 공유기에서 `외부포트 → NAS-IP:5173` 매핑
+4. **백그라운드 실행** (선택) — SSH 세션 유지용 `nohup npm run dev > dev.log 2>&1 &` 또는 `pm2 start npm --name heyum -- run dev`
+
+### 13.4 관련 파일
+
+| 파일 | 역할 |
+|------|------|
+| `package.json` | `npm run dev` 스크립트 |
+| `vite.config.js` | `host: 0.0.0.0`, 포트 설정 |
+| `.env.example` | `PORT` 예시 |
+
+---
+
 *문서 버전: 2026-05 — 현행 `style.css` 베이지·화이트 룩북 디자인 기준*

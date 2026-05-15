@@ -1,0 +1,14 @@
+{
+  "name": "heyum-static",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HEYUM 핸드메이드 주얼리 정적 룩북",
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}
