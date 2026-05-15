@@ -259,7 +259,7 @@ main
 
 ## 12. 하지 말 것 (Don't)
 
-- Tailwind 등으로 **토큰 없이 임의 HEX** 남발
+- Tailwind 등으로 **토큰 없이 임의 HEX** 남발 
 - Hero에 **다크 그린/블랙 풀 오버레이** + 화이트 텍스트 조합 (구버전)
 - 갤러리·Order를 **다크 모드 섹션**으로 변경
 - 애니메이션 과다 추가 (패럴랙스, 바운스, 플래시)
@@ -274,42 +274,59 @@ main
 
 정적 파일은 **Vite** 개발 서버로 제공합니다. `0.0.0.0`에 바인딩되어 LAN·외부에서 접속 가능합니다.
 
-### 13.1 최초 1회 (NAS SSH 또는 터미널)
+> **Ugreen NAS + Docker**: NAS 호스트에 npm이 없어도 됩니다. 아래 **Docker 방식**을 사용하세요. (컨테이너 안에 Node·npm이 포함됩니다.)
+
+### 13.1 Docker로 실행 (권장 — NAS)
+
+프로젝트 폴더에서 (Ugreen Docker / SSH):
 
 ```bash
-cd /path/to/heyum-static   # NAS에 클론·복사한 프로젝트 경로
-npm install
+cd /path/to/heyum-static
+docker compose up --build -d
 ```
 
-### 13.2 서버 실행
+중지:
 
 ```bash
-npm run dev
+docker compose down
 ```
 
-기본 주소:
+Ugreen Docker GUI 사용 시: `docker-compose.yml`이 있는 폴더를 **Compose 프로젝트**로 가져와 실행.
 
 | 접속 위치 | URL 예시 |
 |-----------|----------|
 | NAS 본인 | `http://127.0.0.1:5173` |
 | 같은 Wi‑Fi | `http://<NAS-IP>:5173` |
-| 외부 인터넷 | 공유기 포트포워딩 또는 Ugreen 역방향 프록시 후 `http://<공인IP>:5173` |
+| 외부 인터넷 | 포트포워딩 후 `http://<공인IP>:5173` |
 
-포트 변경: `PORT=8080 npm run dev` 또는 `.env`에 `PORT=8080` 설정.
+포트 변경: `docker-compose.yml`의 `ports`를 `"8080:5173"`처럼 수정 후 재시작.
+
+로그 확인: `docker compose logs -f heyum-dev`
+
+### 13.2 로컬 PC에서 npm으로 실행 (선택)
+
+Node가 설치된 PC에서만:
+
+```bash
+npm install
+npm run dev
+```
 
 ### 13.3 Ugreen NAS 체크리스트
 
-1. **Node.js** — Ugreen 앱 스토어 / Docker / `nvm` 등으로 Node 18+ 설치
-2. **방화벽** — NAS 설정에서 TCP `5173`(또는 지정 포트) 허용
-3. **포트포워딩** (외부용) — 공유기에서 `외부포트 → NAS-IP:5173` 매핑
-4. **백그라운드 실행** (선택) — SSH 세션 유지용 `nohup npm run dev > dev.log 2>&1 &` 또는 `pm2 start npm --name heyum -- run dev`
+1. **Docker** — Ugreen 앱에서 Docker 활성화 (npm 설치 불필요)
+2. **방화벽** — TCP `5173` 허용
+3. **포트포워딩** (외부용) — `외부포트 → NAS-IP:5173`
+4. **파일 수정 반영** — 소스 폴더가 볼륨 마운트되므로 HTML/CSS 저장 시 자동 새로고침 (Docker용 polling 설정 포함)
 
 ### 13.4 관련 파일
 
 | 파일 | 역할 |
 |------|------|
-| `package.json` | `npm run dev` 스크립트 |
-| `vite.config.js` | `host: 0.0.0.0`, 포트 설정 |
+| `docker-compose.yml` | NAS Docker 실행 정의 |
+| `Dockerfile.dev` | Node 22 + `npm run dev` 이미지 |
+| `package.json` | `dev` 스크립트, `docker:dev` 등 |
+| `vite.config.js` | `host: 0.0.0.0`, Docker watch polling |
 | `.env.example` | `PORT` 예시 |
 
 ---

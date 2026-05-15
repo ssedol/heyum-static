@@ -10,6 +10,10 @@ export default defineConfig({
     port: Number(process.env.PORT) || 5173,
     strictPort: false,
     open: false,
+    // Docker(NAS) 볼륨 마운트 시 파일 변경 감지
+    watch: {
+      usePolling: process.env.CHOKIDAR_USEPOLLING === "true",
+    },
   },
   preview: {
     host: "0.0.0.0",

@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "docker:dev": "docker compose up --build",
+    "docker:dev:detach": "docker compose up --build -d",
+    "docker:stop": "docker compose down"
   },
   "devDependencies": {
     "vite": "^6.3.5"
