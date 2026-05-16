@@ -9,7 +9,8 @@
     "start": "npm run dev",
     "docker:dev": "docker compose up --build",
     "docker:dev:detach": "docker compose up --build -d",
-    "docker:stop": "docker compose down"
+    "docker:stop": "docker compose down",
+    "deploy": "sh deploy.sh"
   },
   "devDependencies": {
     "vite": "^6.3.5"
